@@ -1,0 +1,28 @@
+{
+	"name": "linguo-bot",
+	"version": "1.0.0",
+	"description": "Bot Linguo para Discord",
+	"main": "src/index.js",
+	"scripts": {
+		"dev": "nodemon src/index.js",
+		"start": "node src/index.js",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://gitlab.com/P-Jonathan/linguo-bot.git"
+	},
+	"author": "Paz Jonathan",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://gitlab.com/P-Jonathan/linguo-bot/issues"
+	},
+	"homepage": "https://gitlab.com/P-Jonathan/linguo-bot#readme",
+	"dependencies": {
+		"discord.js": "^12.5.1",
+		"dotenv": "^8.2.0"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.6"
+	}
+}
