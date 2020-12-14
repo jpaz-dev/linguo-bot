@@ -20,7 +20,8 @@
 	"homepage": "https://gitlab.com/P-Jonathan/linguo-bot#readme",
 	"dependencies": {
 		"discord.js": "^12.5.1",
-		"dotenv": "^8.2.0"
+		"dotenv": "^8.2.0",
+		"node-cron": "^2.0.3"
 	},
 	"devDependencies": {
 		"nodemon": "^2.0.6"
