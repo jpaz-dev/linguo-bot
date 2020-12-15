@@ -1,5 +1,5 @@
 import { MessageEmbed } from "discord.js";
-import Bot from "./Bot";
+import Bot from "./bot/Bot";
 import Cron from "./Cron";
 import ImageManager from "./ImageManager";
 

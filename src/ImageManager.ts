@@ -1,6 +1,6 @@
 import { MessageEmbed } from "discord.js";
-import Bot from "./Bot";
-import { CommandHandlerArgs } from "./types/BotProps";
+import Bot from "./bot/Bot";
+import { CommandHandlerArgs } from "./bot/CommandHandler";
 
 export default class ImageManager {
 	private _bot: Bot;

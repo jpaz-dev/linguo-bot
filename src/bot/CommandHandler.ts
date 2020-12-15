@@ -8,6 +8,6 @@ export interface CommandHandlerArgs {
 	sendMessage(embed);
 }
 
-export default interface CommandHandler {
+export interface CommandHandler {
 	(args: CommandHandlerArgs): void;
 }

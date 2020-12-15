@@ -1,6 +1,6 @@
 import { MessageEmbed } from "discord.js";
 import cron from "node-cron";
-import Bot from "./Bot";
+import Bot from "./bot/Bot";
 
 export default class Cron {
 	private _bot: Bot;
