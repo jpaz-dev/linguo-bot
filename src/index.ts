@@ -2,9 +2,11 @@ import { MessageEmbed } from "discord.js";
 import Bot from "./bot/Bot";
 import Cron from "./Cron";
 import ImageManager from "./ImageManager";
+import TenorManager from "./tenor/TenorManager";
 
 const bot = new Bot();
 const imageManager = new ImageManager(bot);
+const tenorManager = new TenorManager();
 
 bot.addCommand("asuka", ({ sendMessage }) => {
 	const embed = new MessageEmbed();
@@ -34,6 +36,8 @@ bot.addCommand("remove_channel", ({ guildId, channelId, reply }) => {
 bot.addCommand("add_image", (args) => imageManager.addImage(args));
 
 bot.addCommand("remove_image", (args) => imageManager.removeImage(args));
+
+bot.addCommand("search_image", (args) => tenorManager.searchImage(args));
 
 bot.client.on("ready", () => {
 	const cron = new Cron(bot);
