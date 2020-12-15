@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const { greeting } = require("./greeting");
+const { greeting } = require("./commands/greeting");
 require("dotenv").config();
 
 const client = new Discord.Client();

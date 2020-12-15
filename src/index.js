@@ -1,6 +1,6 @@
 const Bot = require("./bot");
 const { cron } = require("./cron");
-const { greeting } = require("./greeting");
+const { greeting } = require("./commands/greeting");
 
 Bot.addCommand("asuka", greeting);
 

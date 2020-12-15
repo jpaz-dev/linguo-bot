@@ -1,6 +1,6 @@
 const Bot = require("./bot");
 const cron = require("node-cron");
-const { greeting } = require("./greeting");
+const { greeting } = require("./commands/greeting");
 
 module.exports.cron = () => {
 	console.log("Starting cron...");
