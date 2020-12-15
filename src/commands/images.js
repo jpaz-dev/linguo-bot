@@ -16,7 +16,7 @@ const getImage = ({ command, sendMessage }) => {
 
 module.exports.addImage = ({ args, reply }) => {
 	if (!args || !args[0] || args[0].length === 0 || !args[1] || args[1].length === 1) {
-		reply("Invalid arguments");
+		reply("Invalid arguments.");
 		return;
 	}
 
@@ -34,7 +34,12 @@ module.exports.addImage = ({ args, reply }) => {
 
 module.exports.removeImage = ({ args, reply }) => {
 	if (!args || !args[0] || args[0].length === 0) {
-		reply("Invalid arguments");
+		reply("Invalid arguments.");
+		return;
+	}
+
+	if (!images[args[0]]) {
+		reply("There is no image with that name.");
 		return;
 	}
 
