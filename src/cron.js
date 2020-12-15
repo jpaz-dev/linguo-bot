@@ -1,7 +1,19 @@
+const Bot = require("./bot");
 const cron = require("node-cron");
+const { greeting } = require("./greeting");
 
 module.exports.cron = () => {
 	console.log("Starting cron...");
+
+	const cronGreeting = () => {
+		for (const ch of Bot.channels) {
+			greeting({
+				sendAttachement: (text, attachement) => {
+					Bot.sendAttachement(ch.guildId, ch.channelId, text, attachement);
+				},
+			});
+		}
+	};
 
 	//  * * * * * *
 	//  | | | | | |_ day of week
