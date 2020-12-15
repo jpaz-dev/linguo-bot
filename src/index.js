@@ -1,6 +1,7 @@
 const Bot = require("./bot");
 const { cron } = require("./cron");
 const { greeting } = require("./commands/greeting");
+const { addImage, removeImage } = require("./commands/images");
 
 Bot.addCommand("asuka", greeting);
 
@@ -19,6 +20,10 @@ Bot.addCommand("remove_channel", ({ guildId, channelId, reply }) => {
 	reply("Ok");
 	console.log(Bot.channels);
 });
+
+Bot.addCommand("add_image", (args) => addImage(args));
+
+Bot.addCommand("remove_image", (args) => removeImage(args));
 
 Bot.client.on("ready", () => cron());
 

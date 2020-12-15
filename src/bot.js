@@ -75,11 +75,13 @@ client.on("message", (message) => {
 
 	for (const cb of cbs) {
 		cb({
+			args,
+			command,
 			channelId: message.channel.id,
 			guildId: message.guild.id,
 			reply: (text) => message.reply(text),
 			sendAttachement: (title, attachement) => sendAttachement(message.guild.id, message.channel.id, title, attachement),
-			sendMessage: (text) => sendMessage(message.guild.id, message.channel.id, text),
+			sendMessage: (embed) => sendMessage(message.guild.id, message.channel.id, embed),
 		});
 	}
 });
