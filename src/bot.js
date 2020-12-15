@@ -48,7 +48,7 @@ const sendAttachement = async (guildId, channelId, title, attachement) => {
 const start = async () => {
 	try {
 		await client.login(process.env.BOT_TOKEN);
-		await client.user.setActivity(process.env.BOT_STATUS || "Listening! :D");
+		await client.user.setActivity(" -help :D", { type: "LISTENING" });
 		console.log("The bot initialized successfully.");
 	} catch (e) {
 		console.log(e);
