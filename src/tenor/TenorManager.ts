@@ -6,7 +6,7 @@ import TenorSearch from "./TenorResult";
 
 export default class TenorManager {
 	searchImage = async ({ args, sendMessage }: CommandHandlerArgs) => {
-		const res = await fetch(getUrl(args.join("-"), 1));
+		const res = await fetch(getUrl(args.join(" "), 1));
 		const result: TenorSearch = await res.json();
 		const link = result?.results[0]?.media[0]?.gif?.url;
 		const title = result?.results[0]?.title;
