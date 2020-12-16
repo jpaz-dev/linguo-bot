@@ -18,6 +18,7 @@ bot.addCommand("asuka", ({ sendMessage }) => {
 bot.addCommand("add_channel", ({ guildId, channelId, reply }) => {
 	if (bot.existChannel(guildId, channelId)) {
 		reply("Channel already added.");
+		return;
 	}
 
 	bot.addChannel(guildId, channelId);
@@ -27,6 +28,7 @@ bot.addCommand("add_channel", ({ guildId, channelId, reply }) => {
 bot.addCommand("remove_channel", ({ guildId, channelId, reply }) => {
 	if (!bot.existChannel(guildId, channelId)) {
 		reply("Not channel found.");
+		return;
 	}
 
 	bot.removeChannel(guildId, channelId);
