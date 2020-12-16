@@ -118,7 +118,7 @@ export default class Bot {
 	}
 
 	existChannel(guildId: string, channelId: string) {
-		return this._channels.filter((ch) => ch.guildId === guildId && ch.channelId === channelId).length === 0;
+		return this._channels.filter((ch) => ch.guildId === guildId && ch.channelId === channelId).length > 0;
 	}
 
 	existCommand(command: string) {
