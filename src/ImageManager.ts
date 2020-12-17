@@ -1,6 +1,7 @@
 import { MessageEmbed } from "discord.js";
 import Bot from "./bot/Bot";
 import { CommandHandlerArgs } from "./bot/CommandHandler";
+import { DiscordImage } from "./entity/DiscordImage";
 
 export default class ImageManager {
 	private _bot: Bot;
@@ -11,8 +12,8 @@ export default class ImageManager {
 		this._images = new Map();
 	}
 
-	private getImage = ({ command, sendMessage }: CommandHandlerArgs) => {
-		const image = this._images[command];
+	private getImage = async ({ command, guildId, channelId, sendMessage }: CommandHandlerArgs) => {
+		const image = await DiscordImage.findOne({ where: { name: command, guildId, channelId } });
 
 		if (image) {
 			const embed = new MessageEmbed();
@@ -22,7 +23,7 @@ export default class ImageManager {
 		}
 	};
 
-	addImage = ({ args, reply }: CommandHandlerArgs) => {
+	addImage = async ({ args, channelId, guildId, reply }: CommandHandlerArgs) => {
 		if (!args || !args[0] || args[0].length === 0 || !args[1] || args[1].length === 1) {
 			reply("Invalid arguments.");
 			return;
@@ -33,27 +34,32 @@ export default class ImageManager {
 			return;
 		}
 
-		this._images[args[0]] = { link: args[1], name: args[0], title: args.slice(2).join(" ") };
+		const image = new DiscordImage();
+		image.guildId = guildId;
+		image.channelId = channelId;
+		image.name = args[0];
+		image.link = args[1];
+		image.title = args.slice(2).join(" ");
+
+		await image.save();
 
 		this._bot.addCommand(args[0], (props) => this.getImage(props));
 
 		reply("Ok");
 	};
 
-	removeImage = ({ args, reply }: CommandHandlerArgs) => {
+	removeImage = async ({ args, guildId, channelId, reply }: CommandHandlerArgs) => {
 		if (!args || !args[0] || args[0].length === 0) {
 			reply("Invalid arguments.");
 			return;
 		}
 
-		if (!this._images[args[0]]) {
-			reply("There is no image with that name.");
-			return;
+		try {
+			await DiscordImage.delete({ name: args[0], guildId, channelId });
+			this._bot.removeCommand(args[0]);
+			reply("Ok");
+		} catch (e) {
+			reply(e?.message);
 		}
-
-		this._bot.removeCommand(args[0]);
-		this._images[args[0]] = null;
-
-		reply("Ok");
 	};
 }
