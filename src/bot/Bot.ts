@@ -138,10 +138,6 @@ export default class Bot {
 		return DiscordChannel.find();
 	};
 
-	get channels() {
-		return [];
-	}
-
 	get client() {
 		return this._client;
 	}

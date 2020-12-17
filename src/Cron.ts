@@ -16,9 +16,13 @@ export default class Cron {
 		embed.setImage("https://media1.tenor.com/images/28fc963091e05e1deb32e096c28f040f/tenor.gif?itemid=18184379");
 		embed.setTitle("¡Feliz Jueves!");
 
-		const cronGreeting = () => {
-			for (const { guildId, channelId } of this._bot.channels) {
-				this._bot.sendMessage(guildId, channelId, embed);
+		const cronGreeting = async () => {
+			const channels = await this._bot.getChannels();
+			for (const { guildId, channelId } of channels) {
+				this._bot
+					.sendMessage(guildId, channelId, embed)
+					.then(() => console.log(`Successfully notified: { guildId: ${guildId}, channelId: ${channelId} }`))
+					.catch((e) => console.log(`Could not notify: { guildId: ${guildId}, channelId: ${channelId} }\n`, e));
 			}
 		};
 
