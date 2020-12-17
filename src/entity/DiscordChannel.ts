@@ -1,15 +1,12 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity()
-export class DiscordChannel {
+export class DiscordChannel extends BaseEntity {
 	@PrimaryColumn({ name: "guild_id" })
-	guildId: number;
+	guildId: string;
 
 	@PrimaryColumn({ name: "channel_id" })
-	channelId: number;
-
-	@Column()
-	name: string;
+	channelId: string;
 
 	@Column({ name: "create_at", default: new Date() })
 	createAt: Date;

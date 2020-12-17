@@ -1,19 +1,17 @@
 import { Client, TextChannel } from "discord.js";
 import * as Dotenv from "dotenv";
-import Channel from "./Channel";
+import { DiscordChannel } from "../entity/DiscordChannel";
 import { CommandHandler } from "./CommandHandler";
 
 export default class Bot {
 	private static PREFIX = "!";
 	private _client: Client;
-	private _channels: Channel[];
 	private _commands: Map<string, CommandHandler[]>;
 
 	constructor() {
 		Dotenv.config();
 
 		this._client = new Client();
-		this._channels = [];
 		this._commands = new Map();
 
 		this._client.on("message", (message) => {
@@ -97,36 +95,44 @@ export default class Bot {
 		(channel as TextChannel).send(title || "", { files: [attachement] });
 	};
 
-	addChannel(guildId: string, channelId: string) {
+	addChannel = async (guildId: string, channelId: string): Promise<DiscordChannel> => {
 		if (this.existChannel(guildId, channelId)) {
 			throw new Error("Channel already exists.");
 		}
 
-		this._channels.push({ guildId, channelId });
-	}
+		const channel = new DiscordChannel();
+		channel.guildId = guildId;
+		channel.channelId = channelId;
+		return channel.save();
+	};
 
-	removeChannel(guildId: string, channelId: string) {
+	removeChannel = async (guildId: string, channelId: string): Promise<void> => {
 		if (!this.existChannel(guildId, channelId)) {
 			throw new Error("Channel not exists.");
 		}
 
-		this._channels = this._channels.filter((ch) => !(ch.guildId === guildId && ch.channelId === channelId));
-	}
+		DiscordChannel.delete({ guildId, channelId });
+	};
 
 	removeCommand(command: string) {
 		this._commands[command] = null;
 	}
 
-	existChannel(guildId: string, channelId: string) {
-		return this._channels.filter((ch) => ch.guildId === guildId && ch.channelId === channelId).length > 0;
-	}
+	existChannel = async (guildId: string, channelId: string) => {
+		const count = await DiscordChannel.count({ where: { guildId, channelId } });
+		return count > 0;
+	};
 
 	existCommand(command: string) {
 		return !!this._commands[command];
 	}
 
+	getChannels = (): Promise<DiscordChannel[]> => {
+		return DiscordChannel.find();
+	};
+
 	get channels() {
-		return this._channels;
+		return [];
 	}
 
 	get client() {

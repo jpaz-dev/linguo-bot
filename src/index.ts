@@ -3,7 +3,6 @@ import "reflect-metadata";
 import Bot from "./bot/Bot";
 import Cron from "./Cron";
 import DatabaseConfig from "./DatabaseConfig";
-import { User } from "./entity/User";
 import ImageManager from "./ImageManager";
 import TenorManager from "./tenor/TenorManager";
 
@@ -51,8 +50,5 @@ bot.client.on("ready", () => {
 });
 
 databaseconfig.connect().then(async (connection) => {
-	const userRepository = connection.getRepository(User);
-	const users = await userRepository.find();
-	console.log("Users: ", users);
 	bot.start();
 });
