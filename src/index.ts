@@ -1,12 +1,16 @@
 import { MessageEmbed } from "discord.js";
+import "reflect-metadata";
 import Bot from "./bot/Bot";
 import Cron from "./Cron";
+import DatabaseConfig from "./DatabaseConfig";
+import { User } from "./entity/User";
 import ImageManager from "./ImageManager";
 import TenorManager from "./tenor/TenorManager";
 
 const bot = new Bot();
 const imageManager = new ImageManager(bot);
 const tenorManager = new TenorManager();
+const databaseconfig = new DatabaseConfig();
 
 bot.addCommand("asuka", ({ sendMessage }) => {
 	const embed = new MessageEmbed();
@@ -46,4 +50,9 @@ bot.client.on("ready", () => {
 	cron.start();
 });
 
-bot.start();
+databaseconfig.connect().then(async (connection) => {
+	const userRepository = connection.getRepository(User);
+	const users = await userRepository.find();
+	console.log("Users: ", users);
+	bot.start();
+});

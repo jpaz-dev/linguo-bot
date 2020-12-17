@@ -1,34 +1,41 @@
 {
-	"name": "linguo-bot",
-	"version": "1.0.0",
-	"description": "Bot Linguo para Discord",
-	"main": "src/index.js",
-	"scripts": {
-		"start:dev": "nodemon src/index.ts",
-		"start": "node dist/index.js",
-		"prestart": "npx tsc"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://gitlab.com/P-Jonathan/linguo-bot.git"
-	},
-	"author": "Paz Jonathan",
-	"license": "ISC",
-	"bugs": {
-		"url": "https://gitlab.com/P-Jonathan/linguo-bot/issues"
-	},
-	"homepage": "https://gitlab.com/P-Jonathan/linguo-bot#readme",
-	"dependencies": {
-		"@types/node": "^14.14.14",
-		"@types/node-cron": "^2.0.3",
-		"@types/node-fetch": "^2.5.7",
-		"discord.js": "^12.5.1",
-		"dotenv": "^8.2.0",
-		"node-cron": "^2.0.3",
-		"node-fetch": "^2.6.1",
-		"typescript": "^4.1.3"
-	},
-	"devDependencies": {
-		"nodemon": "^2.0.6"
-	}
+   "name": "linguo-bot",
+   "version": "1.0.0",
+   "description": "Bot Linguo para Discord",
+   "main": "src/index.js",
+   "scripts": {
+      "start:dev": "nodemon src/index.ts",
+      "start": "ts-node src/index.ts",
+      "prestart": "npx tsc"
+   },
+   "repository": {
+      "type": "git",
+      "url": "git+https://gitlab.com/P-Jonathan/linguo-bot.git"
+   },
+   "author": "Paz Jonathan",
+   "license": "ISC",
+   "bugs": {
+      "url": "https://gitlab.com/P-Jonathan/linguo-bot/issues"
+   },
+   "homepage": "https://gitlab.com/P-Jonathan/linguo-bot#readme",
+   "dependencies": {
+      "@types/node": "^14.14.14",
+      "@types/node-cron": "^2.0.3",
+      "@types/node-fetch": "^2.5.7",
+      "discord.js": "^12.5.1",
+      "dotenv": "^8.2.0",
+      "node-cron": "^2.0.3",
+      "node-fetch": "^2.6.1",
+      "pg": "^8.4.0",
+      "reflect-metadata": "^0.1.10",
+      "typeorm": "0.2.29",
+      "typescript": "^4.1.3",
+      "mysql": "^2.14.1"
+   },
+   "devDependencies": {
+      "nodemon": "^2.0.6",
+      "ts-node": "3.3.0",
+      "@types/node": "^8.0.29",
+      "typescript": "3.3.3333"
+   }
 }

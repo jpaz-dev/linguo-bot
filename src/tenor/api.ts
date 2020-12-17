@@ -1,6 +1,6 @@
-import dotenv from "dotenv";
+import * as Dotenv from "dotenv";
 
-dotenv.config();
+Dotenv.config();
 
 export const BASE_URL = "https://api.tenor.com/v1";
 

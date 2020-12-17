@@ -1,7 +1,7 @@
 import { Client, TextChannel } from "discord.js";
-import dotenv from "dotenv";
-import { CommandHandler } from "./CommandHandler";
+import * as Dotenv from "dotenv";
 import Channel from "./Channel";
+import { CommandHandler } from "./CommandHandler";
 
 export default class Bot {
 	private static PREFIX = "!";
@@ -10,7 +10,7 @@ export default class Bot {
 	private _commands: Map<string, CommandHandler[]>;
 
 	constructor() {
-		dotenv.config();
+		Dotenv.config();
 
 		this._client = new Client();
 		this._channels = [];

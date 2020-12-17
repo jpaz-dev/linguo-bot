@@ -1,5 +1,5 @@
 import { MessageEmbed } from "discord.js";
-import cron from "node-cron";
+import * as NodeCron from "node-cron";
 import Bot from "./bot/Bot";
 
 export default class Cron {
@@ -30,7 +30,7 @@ export default class Cron {
 		//  | |_________ minute
 		//  |___________ second (optional)
 		//
-		cron.schedule("0 0 9 * * 4", () => cronGreeting(), { timezone: "America/Argentina/Buenos_Aires" });
+		NodeCron.schedule("0 0 9 * * 4", () => cronGreeting(), { timezone: "America/Argentina/Buenos_Aires" });
 
 		console.log("Cron successfully initialized.");
 	}
