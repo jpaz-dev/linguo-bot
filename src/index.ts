@@ -1,12 +1,15 @@
 import { MessageEmbed } from "discord.js";
+import "reflect-metadata";
 import Bot from "./bot/Bot";
 import Cron from "./Cron";
+import DatabaseConfig from "./DatabaseConfig";
 import ImageManager from "./ImageManager";
 import TenorManager from "./tenor/TenorManager";
 
 const bot = new Bot();
 const imageManager = new ImageManager(bot);
 const tenorManager = new TenorManager();
+const databaseconfig = new DatabaseConfig();
 
 bot.addCommand("asuka", ({ sendMessage }) => {
 	const embed = new MessageEmbed();
@@ -16,23 +19,15 @@ bot.addCommand("asuka", ({ sendMessage }) => {
 });
 
 bot.addCommand("add_channel", ({ guildId, channelId, reply }) => {
-	if (bot.existChannel(guildId, channelId)) {
-		reply("Channel already added.");
-		return;
-	}
-
-	bot.addChannel(guildId, channelId);
-	reply("Ok");
+	bot.addChannel(guildId, channelId)
+		.then(() => reply("Ok"))
+		.catch((e: Error) => reply(e.message));
 });
 
 bot.addCommand("remove_channel", ({ guildId, channelId, reply }) => {
-	if (!bot.existChannel(guildId, channelId)) {
-		reply("Not channel found.");
-		return;
-	}
-
-	bot.removeChannel(guildId, channelId);
-	reply("Ok");
+	bot.removeChannel(guildId, channelId)
+		.then(() => reply("Ok"))
+		.catch((e: Error) => reply(e.message));
 });
 
 bot.addCommand("add_image", (args) => imageManager.addImage(args));
@@ -46,4 +41,6 @@ bot.client.on("ready", () => {
 	cron.start();
 });
 
-bot.start();
+databaseconfig.connect().then(async () => {
+	bot.start();
+});

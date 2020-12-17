@@ -1,19 +1,18 @@
 import { Client, TextChannel } from "discord.js";
-import dotenv from "dotenv";
+import * as Dotenv from "dotenv";
+import { DiscordChannel } from "../entity/DiscordChannel";
 import { CommandHandler } from "./CommandHandler";
-import Channel from "./Channel";
 
 export default class Bot {
 	private static PREFIX = "!";
-	private _client: Client;
-	private _channels: Channel[];
+	private static COMMAND_PATTERN = /^[a-zA-Z0-9\-_]{3,40}$/;
 	private _commands: Map<string, CommandHandler[]>;
+	private _client: Client;
 
 	constructor() {
-		dotenv.config();
+		Dotenv.config();
 
 		this._client = new Client();
-		this._channels = [];
 		this._commands = new Map();
 
 		this._client.on("message", (message) => {
@@ -60,9 +59,47 @@ export default class Bot {
 	};
 
 	addCommand = (command: string, commandHandler: CommandHandler) => {
+		if (!command || !command.match(Bot.COMMAND_PATTERN)) {
+			throw new Error("Invalid command format.");
+		}
+
 		const callbacks: CommandHandler[] = !!this._commands[command] ? this._commands[command] : [];
 		callbacks.push(commandHandler);
 		this._commands[command] = callbacks;
+	};
+
+	removeCommand(command: string) {
+		this._commands[command] = null;
+	}
+
+	existCommand(command: string) {
+		return !!this._commands[command];
+	}
+
+	addChannel = async (guildId: string, channelId: string): Promise<DiscordChannel> => {
+		const exists = await this.existChannel(guildId, channelId);
+		if (exists) {
+			throw new Error("Channel already exists.");
+		}
+
+		const channel = new DiscordChannel();
+		channel.guildId = guildId;
+		channel.channelId = channelId;
+		return channel.save();
+	};
+
+	removeChannel = async (guildId: string, channelId: string): Promise<void> => {
+		const exists = await this.existChannel(guildId, channelId);
+		if (!exists) {
+			throw new Error("Channel not exists.");
+		}
+
+		DiscordChannel.delete({ guildId, channelId });
+	};
+
+	existChannel = async (guildId: string, channelId: string) => {
+		const count = await DiscordChannel.count({ where: { guildId, channelId } });
+		return count > 0;
 	};
 
 	sendMessage = async (guildId: string, channelId: string, message) => {
@@ -97,37 +134,9 @@ export default class Bot {
 		(channel as TextChannel).send(title || "", { files: [attachement] });
 	};
 
-	addChannel(guildId: string, channelId: string) {
-		if (this.existChannel(guildId, channelId)) {
-			throw new Error("Channel already exists.");
-		}
-
-		this._channels.push({ guildId, channelId });
-	}
-
-	removeChannel(guildId: string, channelId: string) {
-		if (!this.existChannel(guildId, channelId)) {
-			throw new Error("Channel not exists.");
-		}
-
-		this._channels = this._channels.filter((ch) => !(ch.guildId === guildId && ch.channelId === channelId));
-	}
-
-	removeCommand(command: string) {
-		this._commands[command] = null;
-	}
-
-	existChannel(guildId: string, channelId: string) {
-		return this._channels.filter((ch) => ch.guildId === guildId && ch.channelId === channelId).length > 0;
-	}
-
-	existCommand(command: string) {
-		return !!this._commands[command];
-	}
-
-	get channels() {
-		return this._channels;
-	}
+	getChannels = (): Promise<DiscordChannel[]> => {
+		return DiscordChannel.find();
+	};
 
 	get client() {
 		return this._client;
