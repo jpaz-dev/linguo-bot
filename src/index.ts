@@ -19,23 +19,15 @@ bot.addCommand("asuka", ({ sendMessage }) => {
 });
 
 bot.addCommand("add_channel", ({ guildId, channelId, reply }) => {
-	if (bot.existChannel(guildId, channelId)) {
-		reply("Channel already added.");
-		return;
-	}
-
-	bot.addChannel(guildId, channelId);
-	reply("Ok");
+	bot.addChannel(guildId, channelId)
+		.then(() => reply("Ok"))
+		.catch((e: Error) => reply(e.message));
 });
 
 bot.addCommand("remove_channel", ({ guildId, channelId, reply }) => {
-	if (!bot.existChannel(guildId, channelId)) {
-		reply("Not channel found.");
-		return;
-	}
-
-	bot.removeChannel(guildId, channelId);
-	reply("Ok");
+	bot.removeChannel(guildId, channelId)
+		.then(() => reply("Ok"))
+		.catch((e: Error) => reply(e.message));
 });
 
 bot.addCommand("add_image", (args) => imageManager.addImage(args));
@@ -49,6 +41,6 @@ bot.client.on("ready", () => {
 	cron.start();
 });
 
-databaseconfig.connect().then(async (connection) => {
+databaseconfig.connect().then(async () => {
 	bot.start();
 });

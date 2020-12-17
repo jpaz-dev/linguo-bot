@@ -5,8 +5,9 @@ import { CommandHandler } from "./CommandHandler";
 
 export default class Bot {
 	private static PREFIX = "!";
-	private _client: Client;
+	private static COMMAND_PATTERN = /^[a-zA-Z0-9\-_]{3,40}$/;
 	private _commands: Map<string, CommandHandler[]>;
+	private _client: Client;
 
 	constructor() {
 		Dotenv.config();
@@ -58,9 +59,47 @@ export default class Bot {
 	};
 
 	addCommand = (command: string, commandHandler: CommandHandler) => {
+		if (!command || !command.match(Bot.COMMAND_PATTERN)) {
+			throw new Error("Invalid command format.");
+		}
+
 		const callbacks: CommandHandler[] = !!this._commands[command] ? this._commands[command] : [];
 		callbacks.push(commandHandler);
 		this._commands[command] = callbacks;
+	};
+
+	removeCommand(command: string) {
+		this._commands[command] = null;
+	}
+
+	existCommand(command: string) {
+		return !!this._commands[command];
+	}
+
+	addChannel = async (guildId: string, channelId: string): Promise<DiscordChannel> => {
+		const exists = await this.existChannel(guildId, channelId);
+		if (exists) {
+			throw new Error("Channel already exists.");
+		}
+
+		const channel = new DiscordChannel();
+		channel.guildId = guildId;
+		channel.channelId = channelId;
+		return channel.save();
+	};
+
+	removeChannel = async (guildId: string, channelId: string): Promise<void> => {
+		const exists = await this.existChannel(guildId, channelId);
+		if (!exists) {
+			throw new Error("Channel not exists.");
+		}
+
+		DiscordChannel.delete({ guildId, channelId });
+	};
+
+	existChannel = async (guildId: string, channelId: string) => {
+		const count = await DiscordChannel.count({ where: { guildId, channelId } });
+		return count > 0;
 	};
 
 	sendMessage = async (guildId: string, channelId: string, message) => {
@@ -94,38 +133,6 @@ export default class Bot {
 
 		(channel as TextChannel).send(title || "", { files: [attachement] });
 	};
-
-	addChannel = async (guildId: string, channelId: string): Promise<DiscordChannel> => {
-		if (this.existChannel(guildId, channelId)) {
-			throw new Error("Channel already exists.");
-		}
-
-		const channel = new DiscordChannel();
-		channel.guildId = guildId;
-		channel.channelId = channelId;
-		return channel.save();
-	};
-
-	removeChannel = async (guildId: string, channelId: string): Promise<void> => {
-		if (!this.existChannel(guildId, channelId)) {
-			throw new Error("Channel not exists.");
-		}
-
-		DiscordChannel.delete({ guildId, channelId });
-	};
-
-	removeCommand(command: string) {
-		this._commands[command] = null;
-	}
-
-	existChannel = async (guildId: string, channelId: string) => {
-		const count = await DiscordChannel.count({ where: { guildId, channelId } });
-		return count > 0;
-	};
-
-	existCommand(command: string) {
-		return !!this._commands[command];
-	}
 
 	getChannels = (): Promise<DiscordChannel[]> => {
 		return DiscordChannel.find();
