@@ -1,6 +1,6 @@
 import { MessageEmbed } from "discord.js";
-import Bot from "./bot/Bot";
-import { CommandHandlerArgs } from "./bot/CommandHandler";
+import Bot from "./Bot";
+import { CommandHandlerArgs } from "./CommandHandler";
 import { DiscordImage } from "./entity/DiscordImage";
 
 export default class ImageManager {

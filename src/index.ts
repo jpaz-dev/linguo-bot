@@ -1,10 +1,10 @@
 import { MessageEmbed } from "discord.js";
 import "reflect-metadata";
 import Bot from "./bot/Bot";
-import Cron from "./Cron";
-import DatabaseConfig from "./DatabaseConfig";
-import ImageManager from "./ImageManager";
-import TenorManager from "./tenor/TenorManager";
+import Cron from "./bot/job/Cron";
+import DatabaseConfig from "./config/DatabaseConfig";
+import ImageManager from "./bot/ImageManager";
+import TenorManager from "./bot/tenor/TenorManager";
 
 const bot = new Bot();
 const imageManager = new ImageManager(bot);

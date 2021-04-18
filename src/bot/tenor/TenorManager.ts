@@ -1,6 +1,6 @@
 import { MessageEmbed } from "discord.js";
 import fetch from "node-fetch";
-import { CommandHandlerArgs } from "../bot/CommandHandler";
+import { CommandHandlerArgs } from "../CommandHandler";
 import { getUrl } from "./api";
 import TenorSearch from "./TenorResult";
 
