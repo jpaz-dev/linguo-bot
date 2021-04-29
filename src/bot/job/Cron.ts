@@ -1,6 +1,7 @@
 import { MessageEmbed } from "discord.js";
 import * as NodeCron from "node-cron";
 import Bot from "./../Bot";
+import { WeekDay, WeekImage, getGreetingImage } from "./../tenor/WeekImage";
 
 export default class Cron {
 	private _bot: Bot;
@@ -12,12 +13,13 @@ export default class Cron {
 	start() {
 		console.log("Starting cron...");
 
-		const embed = new MessageEmbed();
-		embed.setImage("https://media1.tenor.com/images/28fc963091e05e1deb32e096c28f040f/tenor.gif?itemid=18184379");
-		embed.setTitle("¡Feliz Jueves!");
-
-		const cronGreeting = async () => {
+		const greeting = async ({ title, url }: WeekImage) => {
+			const embed = new MessageEmbed();
+			embed.setImage(url);
+			embed.setTitle(title);
+			
 			const channels = await this._bot.getChannels();
+			
 			for (const { guildId, channelId } of channels) {
 				this._bot
 					.sendMessage(guildId, channelId, embed)
@@ -31,10 +33,14 @@ export default class Cron {
 		//  | | | | |___ month
 		//  | | | |_____ day of month
 		//  | | |_______ hour
-		//  | |_________ minute
-		//  |___________ second (optional)
+		//	| |_________ minute
+		//	|___________ second (optional)
 		//
-		NodeCron.schedule("0 0 9 * * 4", () => cronGreeting(), { timezone: "America/Argentina/Buenos_Aires" });
+		NodeCron.schedule("0 0 10 * * 1", () => greeting(getGreetingImage(WeekDay.Monday)), { timezone: "America/Argentina/Buenos_Aires" });
+		NodeCron.schedule("0 0 10 * * 2", () => greeting(getGreetingImage(WeekDay.Tuesday)), { timezone: "America/Argentina/Buenos_Aires" });
+		NodeCron.schedule("0 0 10 * * 3", () => greeting(getGreetingImage(WeekDay.Wednesday)), { timezone: "America/Argentina/Buenos_Aires" });
+		NodeCron.schedule("0 0 10 * * 4", () => greeting(getGreetingImage(WeekDay.Thursday)), { timezone: "America/Argentina/Buenos_Aires" });
+		NodeCron.schedule("0 0 10 * * 5", () => greeting(getGreetingImage(WeekDay.Friday)), { timezone: "America/Argentina/Buenos_Aires" });
 
 		console.log("Cron successfully initialized.");
 	}
