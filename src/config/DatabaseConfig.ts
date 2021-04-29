@@ -16,13 +16,13 @@ export default class DatabaseConfig {
 			},
 			synchronize: true,
 			logging: false,
-			entities: ["src/entity/**/*.ts"],
-			migrations: ["src/migration/**/*.ts"],
-			subscribers: ["src/subscriber/**/*.ts"],
+			entities: ["src/bot/entity/**/*.ts"],
+			migrations: ["src/bot/migration/**/*.ts"],
+			subscribers: ["src/bot/subscriber/**/*.ts"],
 			cli: {
-				entitiesDir: "src/entity",
-				migrationsDir: "src/migration",
-				subscribersDir: "src/subscriber",
+				entitiesDir: "src/bot/entity",
+				migrationsDir: "src/bot/migration",
+				subscribersDir: "src/bot/subscriber",
 			},
 		});
 	};
