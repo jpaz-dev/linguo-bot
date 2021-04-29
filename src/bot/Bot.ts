@@ -1,6 +1,6 @@
 import { Client, TextChannel } from "discord.js";
 import * as Dotenv from "dotenv";
-import { DiscordChannel } from "../entity/DiscordChannel";
+import { DiscordChannel } from "./entity/DiscordChannel";
 import { CommandHandler } from "./CommandHandler";
 
 export default class Bot {
