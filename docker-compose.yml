@@ -1,13 +1,8 @@
 version: "3.3"
 services:
-  node:
-    image: "node:alpine"
-    container_name: "linguo-bot"
-    user: "node"
+  linguo-bot:
     build: .
-    working_dir: /home/node/app
+    image: "linguo-bot:latest"
+    container_name: "linguo-bot"
     environment:
       - NODE_ENV=production
-    volumes:
-      - ./:/home/node/app
-    command: "npm run start"
