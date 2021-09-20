@@ -1,0 +1,34 @@
+build:
+    stage: build
+    image: docker:stable
+    services:
+        - docker:dind
+    script:
+        - echo "Building image..."
+        - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA" .
+        - echo "Deploy docker image to default registry..."
+        - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
+        - docker image tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA" "$CI_REGISTRY_USER/$CI_REGISTRY_IMAGE:$CI_REGISTRY_TAG"
+        - docker image push "$CI_REGISTRY_USER/$CI_REGISTRY_IMAGE:$CI_REGISTRY_TAG"
+        - docker logout
+        - echo "Deploy docker image to heroku registry..."
+        - docker login -u=_ -p="$CI_HEROKU_TOKEN" registry.heroku.com
+        - docker image tag "$CI_REGISTRY_USER/$CI_REGISTRY_IMAGE:$CI_REGISTRY_TAG" "registry.heroku.com/$CI_HEROKU_APP_NAME:$CI_HEROKU_PROCESS_TYPE"
+        - docker image push "registry.heroku.com/$CI_HEROKU_APP_NAME:$CI_HEROKU_PROCESS_TYPE"
+        - docker logout
+        - echo "DOCKER_IMAGE_ID=$(docker inspect registry.heroku.com/$CI_HEROKU_APP_NAME:$CI_HEROKU_PROCESS_TYPE --format={{.Id}})" >> build.env
+    artifacts:
+        reports:
+            dotenv: build.env
+    only:
+        - master
+
+deploy:
+    stage: deploy
+    script:
+        - echo "Running heroku deploy..."
+        - sh ./heroku-deploy.sh
+    dependencies:
+        - build
+    only:
+        - master
