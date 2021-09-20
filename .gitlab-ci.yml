@@ -20,6 +20,8 @@ build:
     artifacts:
         reports:
             dotenv: build.env
+    only:
+        - master
 
 deploy:
     stage: deploy
@@ -28,3 +30,5 @@ deploy:
         - sh ./heroku-deploy.sh
     dependencies:
         - build
+    only:
+        - master
