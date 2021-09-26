@@ -1,3 +1,4 @@
+import * as path from "path";
 import { Connection, createConnection } from "typeorm";
 
 export default class DatabaseConfig {
@@ -17,13 +18,13 @@ export default class DatabaseConfig {
 			},
 			synchronize: true,
 			logging: false,
-			entities: ["src/bot/entity/**/*.ts"],
-			migrations: ["src/bot/migration/**/*.ts"],
-			subscribers: ["src/bot/subscriber/**/*.ts"],
+			entities: [path.resolve(__dirname, "../bot/entity/**/*{.ts,.js}")],
+			migrations: [path.resolve(__dirname, "../bot/migration/**/*{.ts,.js}")],
+			subscribers: [path.resolve(__dirname, "../bot/subscriber/**/*{.ts,.js}")],
 			cli: {
-				entitiesDir: "src/bot/entity",
-				migrationsDir: "src/bot/migration",
-				subscribersDir: "src/bot/subscriber",
+				entitiesDir: path.resolve(__dirname, "../bot/entity/**/*{.ts,.js}"),
+				migrationsDir: path.resolve(__dirname, "../bot/migration/**/*{.ts,.js}"),
+				subscribersDir: path.resolve(__dirname, "../bot/subscriber/**/*{.ts,.js}"),
 			},
 		});
 	};
